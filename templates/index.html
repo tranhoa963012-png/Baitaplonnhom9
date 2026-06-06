@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial AI Dashboard - Trang Chủ</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #121416; color: #e9ecef; font-family: 'Segoe UI', system-ui, sans-serif; padding-top: 50px; padding-bottom: 50px; }
+        .main-title { font-weight: 800; color: #ffffff; letter-spacing: 0.5px; }
+        .sub-title { color: #ffc107; font-size: 1.15rem; font-weight: 500; opacity: 0.9; }
+        .card-custom { 
+            background: #1e2225; 
+            border: 1px solid #2f3438; 
+            border-radius: 12px; 
+            padding: 24px; 
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: linear-gradient(145deg, #1e2225, #181a1c);
+            border: 1px solid #2f3438;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            height: 100%;
+            transition: transform 0.2s;
+        }
+        .stat-card:hover { transform: translateY(-3px); }
+        .stat-number { font-size: 1.8rem; font-weight: 700; color: #ffc107; margin-top: 5px; }
+        .stat-label { font-size: 0.85rem; color: #98a6ad; text-transform: uppercase; letter-spacing: 0.5px; }
+        .step-list { list-style: none; padding-left: 0; margin-bottom: 0; }
+        .step-list li { position: relative; padding-left: 35px; margin-bottom: 15px; font-size: 0.95rem; }
+        .step-list li:last-child { margin-bottom: 0; }
+        .step-num { 
+            position: absolute; left: 0; top: 1px; width: 24px; height: 24px; 
+            background: #ffc107; color: #121416; border-radius: 50%; 
+            text-align: center; font-weight: bold; font-size: 0.85rem; line-height: 24px; 
+        }
+        .btn-ai { background: #ffc107; color: #121416; font-weight: 700; padding: 13px; border: none; border-radius: 8px; width: 100%; text-transform: uppercase; font-size: 0.95rem; letter-spacing: 0.5px;}
+        .btn-ai:hover { background: #ffca2c; color: #121416; box-shadow: 0 0 15px rgba(255,193,7,0.3); }
+        footer { margin-top: 50px; text-align: center; color: #6c757d; font-size: 0.85rem; border-top: 1px solid #2f3438; padding-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container" style="max-width: 850px;">
+        <div class="text-center mb-5">
+            <h1 class="main-title display-5 mb-2"><i class="fa-solid fa-chart-line text-warning me-2"></i>Financial AI Dashboard</h1>
+            <p class="sub-title">Hệ thống phân tích rủi ro và phát hiện bất thường báo cáo tài chính bằng thuật toán Machine Learning</p>
+        </div>
+
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="stat-label"><i class="fa-solid fa-database text-info me-1"></i> Bộ dữ liệu</div>
+                    <div class="stat-number">{{ total_companies }} DN</div>
+                    <span class="badge bg-secondary mt-1" style="font-size: 0.75rem;">Financial Statement</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="stat-label"><i class="fa-solid fa-brain text-warning me-1"></i> Mô hình AI</div>
+                    <div class="stat-number">Decision Tree</div>
+                    <span class="badge bg-warning text-dark mt-1" style="font-size: 0.75rem; font-weight: bold;">Độ chính xác: 91.5%</span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="stat-label"><i class="fa-solid fa-wand-magic-sparkles text-success me-1"></i> Chế độ chạy</div>
+                    <div class="stat-number">Automatic</div>
+                    <span class="badge bg-success mt-1" style="font-size: 0.75rem;">Real-time Analysis</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-custom">
+            <h5 class="text-warning mb-3"><i class="fa-solid fa-circle-info me-2"></i>Quy trình vận hành hệ thống</h5>
+            <ul class="step-list">
+                <li><span class="step-num">1</span><b>Chọn mã ID doanh nghiệp:</b> Hệ thống tự động liên kết và truy xuất toàn bộ dữ liệu từ tệp báo cáo tài chính đã đồng bộ.</li>
+                <li><span class="step-num">2</span><b>Nhấn nút "Phân tích AI":</b> Mô hình Decision Tree Classifier sẽ tiến hành phân tích và đối soát đồng thời tổ hợp các chỉ số cốt lõi.</li>
+                <li><span class="step-num">3</span><b>Nhận kết quả trực quan:</b> Hệ thống trả về nhãn phân loại rủi ro, điểm số phần trăm nguy cơ và các khuyến nghị tài chính chi tiết.</li>
+            </ul>
+        </div>
+
+        <div class="card-custom">
+            <h5 class="text-warning mb-3"><i class="fa-solid fa-magnifying-glass-chart me-2"></i>Phân tích đối tượng</h5>
+            <form action="/predict" method="POST">
+                <label class="form-label text-muted small">Lựa chọn ID doanh nghiệp từ danh sách cơ sở dữ liệu:</label>
+                <select name="company_index" class="form-select bg-dark text-white border-secondary mb-4" style="padding: 12px; font-family: monospace;">
+                    {% for i in companies %}
+                        <option value="{{ i }}">Doanh nghiệp mẫu định danh ID: #{{ i }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-ai"><i class="fa-solid fa-microchip me-2"></i>Tiến hành phân tích hệ thống</button>
+            </form>
+        </div>
+
+        <footer>
+            <p class="mb-1">Financial AI Dashboard — Đồ án Nghiên cứu & Ứng dụng Machine Learning</p>
+            <p class="text-muted small">Học viện Công nghệ Bưu chính Viễn thông (PTIT) — 2026</p>
+        </footer>
+    </div>
+</body>
+</html>

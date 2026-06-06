@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kết Quả Phân Tích AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { background-color: #121416; color: #e9ecef; font-family: 'Segoe UI', sans-serif; padding-top: 40px; padding-bottom: 60px; }
+        .card-custom { background: #1e2225; border: 1px solid #2f3438; border-radius: 12px; padding: 28px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); margin-bottom: 24px; }
+        .section-title { font-size: 1.2rem; font-weight: 600; color: #ffc107; margin-bottom: 20px; border-bottom: 1px solid #2f3438; padding-bottom: 8px; }
+        .ai-box { background-color: #172330; border-left: 4px solid #ffc107; border-radius: 8px; padding: 16px; margin-bottom: 20px; }
+        .progress { background-color: #2f3438; height: 26px; border-radius: 6px; }
+        .progress-bar-custom { font-weight: 700; font-size: 0.9rem; line-height: 26px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); transition: width 0.4s ease; }
+        .rec-item { display: flex; align-items: flex-start; margin-bottom: 12px; font-size: 0.95rem; }
+        .rec-item i { color: #198754; margin-right: 12px; margin-top: 4px; font-size: 1.05rem; }
+        .table-custom { color: #e9ecef; font-size: 0.95rem; }
+        .table-custom th { color: #98a6ad; font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; border-bottom: 2px solid #2f3438; }
+        .table-custom td { border-bottom: 1px solid #2f3438; padding: 12px 8px; }
+        .btn-back { background-color: transparent; border: 1px solid #495057; color: #e9ecef; padding: 10px 22px; border-radius: 6px; text-decoration: none; font-weight: 500; }
+        .btn-back:hover { background-color: #2f3438; color: #fff; }
+        .matrix-table { font-family: monospace; text-align: center; font-size: 0.9rem; color: #fff; margin-bottom: 0; }
+        .matrix-table td { width: 50%; padding: 10px; border: 1px solid #3d4246 !important; }
+        .matrix-header { background: #2b3035; font-weight: bold; color: #ffc107; }
+        footer { text-align: center; color: #6c757d; font-size: 0.85rem; margin-top: 40px; }
+    </style>
+</head>
+<body>
+    <div id="ai-data-holder" 
+         data-risk="{{ risk_score }}" 
+         data-debt-width="{{ width_debt }}" 
+         data-current-width="{{ width_current }}"
+         data-debt-val="{{ debt_to_equity }}" 
+         data-current-val="{{ current_ratio }}" 
+         data-roa="{{ roa }}" 
+         data-roe="{{ roe }}" 
+         style="display: none;">
+    </div>
+
+    <div class="container" style="max-width: 900px;">
+        <div class="card-custom">
+            <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
+                <h3 class="mb-0">Kết quả dự đoán doanh nghiệp #{{ idx }}</h3>
+                <span class="badge {% if status == 'Bình thường' %}bg-success{% else %}bg-danger{% endif %} px-4 py-2" style="font-size: 1.1rem;">
+                    {% if status == 'Bình thường' %}<i class="fa-solid fa-shield-heart me-2"></i>🟢 Bình thường{% else %}<i class="fa-solid fa-triangle-exclamation me-2"></i>🔴 Rủi ro cao{% endif %}
+                </span>
+            </div>
+
+            <div class="mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-muted small fw-bold"><i class="fa-solid fa-gauge-high text-warning me-1"></i> Điểm rủi ro (Risk Score)</span>
+                    <span class="fw-bold text-warning" style="font-size: 1.1rem;">{{ risk_score }}%</span>
+                </div>
+                <div class="progress">
+                    <div id="riskProgressBar" class="progress-bar progress-bar-striped progress-bar-animated {{ badge_color }} progress-bar-custom" role="progressbar"></div>
+                </div>
+            </div>
+
+            <div class="section-title"><i class="fa-solid fa-brain me-2"></i>(3) Đánh giá từ hệ thống (AI Assessment)</div>
+            <div class="ai-box">
+                <p class="mb-0" style="line-height: 1.6; color: #ced4da;">Hệ thống AI đã phân tích toàn diện các chỉ số tài chính dựa trên thuật toán Cây quyết định.</p>
+                <p class="mt-2 mb-0 text-info font-monospace" style="font-size: 0.95rem;"><i class="fa-solid fa-quote-left me-1"></i> Kết quả: <b>{% if status == 'Bình thường' %}Bình thường{% else %}Rủi ro cao{% endif %}</b>. {{ assessment }}</p>
+            </div>
+
+            <div class="section-title"><i class="fa-solid fa-lightbulb me-2"></i>(4) Lời khuyên hành động (AI Recommendation)</div>
+            <div class="mb-4 bg-dark bg-opacity-20 p-3 rounded border border-secondary border-opacity-20">
+                {% for rec in recommendations %}
+                    <div class="rec-item"><i class="fa-solid fa-circle-check"></i><span>{{ rec }}</span></div>
+                {% endfor %}
+            </div>
+
+            <div class="section-title"><i class="fa-solid fa-chart-bar me-2"></i>Biểu đồ so sánh chỉ số an toàn</div>
+            <div class="mb-3">
+                <label class="form-label d-flex justify-content-between mb-1">
+                    <span>Tỷ lệ Nợ/Vốn - Thực tế: {{ debt_to_equity }}</span>
+                    {% if bg_debt == 'bg-danger' %}<span class="text-danger fw-bold">⚠️ Vượt ngưỡng</span>{% else %}<span class="text-success fw-bold">🟢 An toàn</span>{% endif %}
+                </label>
+                <div class="progress"><div id="debtProgressBar" class="progress-bar {{ bg_debt }} progress-bar-custom" role="progressbar"></div></div>
+            </div>
+            <div class="mb-4">
+                <label class="form-label d-flex justify-content-between mb-1">
+                    <span>Hệ số thanh khoản - Thực tế: {{ current_ratio }}</span>
+                    {% if bg_current == 'bg-danger' %}<span class="text-danger fw-bold">⚠️ Thanh toán yếu</span>{% else %}<span class="text-success fw-bold">🟢 An toàn</span>{% endif %}
+                </label>
+                <div class="progress"><div id="currentProgressBar" class="progress-bar {{ bg_current }} progress-bar-custom" role="progressbar"></div></div>
+            </div>
+
+            <div class="row mb-4"><div class="col-12 bg-dark rounded p-3 border border-secondary border-opacity-10"><canvas id="financialChart" style="max-height: 280px;"></canvas></div></div>
+
+            <div class="section-title"><i class="fa-solid fa-table-list me-2"></i>(5) Bảng số liệu chi tiết</div>
+            <div class="table-responsive mb-4">
+                <table class="table table-custom">
+                    <thead><tr><th>Tài khoản đối soát</th><th class="text-end">Giá trị thực tế</th></tr></thead>
+                    <tbody>
+                        <tr><td>Tổng tài sản</td><td class="text-end text-info font-monospace">{{ info['Total_Assets'] }}</td></tr>
+                        <tr><td>Tổng nợ phải trả</td><td class="text-end text-info font-monospace">{{ info['Total_Liabilities'] }}</td></tr>
+                        <tr><td>Doanh thu</td><td class="text-end text-info font-monospace">{{ info['Revenue'] }}</td></tr>
+                        <tr><td>Lợi nhuận ròng</td><td class="text-end text-info font-monospace">{{ info['Net_Income'] }}</td></tr>
+                        <tr><td>Hệ số thanh khoản</td><td class="text-end text-warning font-monospace">{{ current_ratio }}</td></tr>
+                        <tr><td>Tỷ lệ Nợ/Vốn</td><td class="text-end text-warning font-monospace">{{ debt_to_equity }}</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section-title"><i class="fa-solid fa-square-poll-vertical me-2"></i>Độ chính xác & Ma trận nhầm lẫn</div>
+            <div class="row g-3 mb-4">
+                <div class="col-md-6"><div class="p-3 bg-dark bg-opacity-40 rounded h-100"><span class="text-warning small">Độ chính xác: 91.5%</span><pre class="text-info mt-2" style="font-size: 0.8rem;">Bình thường: 0.92 | Bất thường: 0.90</pre></div></div>
+                <div class="col-md-6">
+                    <table class="table table-bordered matrix-table">
+                        <tr><td class="matrix-header">N=250</td><td class="matrix-header">Bình thường</td><td class="matrix-header">Bất thường</td></tr>
+                        <tr><td class="matrix-header">Gốc BN</td><td class="text-success">141</td><td class="text-muted">9</td></tr>
+                        <tr><td class="matrix-header">Gốc BT</td><td class="text-muted">12</td><td class="text-danger">88</td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="pt-2"><a href="/" class="btn btn-back"><i class="fa-solid fa-arrow-left me-2"></i>Quay lại trang chủ</a></div>
+        </div>
+        <footer><p>Financial AI Dashboard — PTIT 2026</p></footer>
+    </div>
+
+    <script>
+        const dataEl = document.getElementById('ai-data-holder');
+        // Update bars
+        document.getElementById('riskProgressBar').style.width = dataEl.dataset.risk + "%";
+        document.getElementById('riskProgressBar').innerText = dataEl.dataset.risk + "%";
+        document.getElementById('debtProgressBar').style.width = dataEl.dataset.debtWidth + "%";
+        document.getElementById('debtProgressBar').innerText = dataEl.dataset.debtVal;
+        document.getElementById('currentProgressBar').style.width = dataEl.dataset.currentWidth + "%";
+        document.getElementById('currentProgressBar').innerText = dataEl.dataset.currentVal;
+
+        // Chart
+        const ctx = document.getElementById('financialChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Nợ/Vốn', 'Thanh khoản', 'ROA', 'ROE'],
+                datasets: [{label: 'Thực tế', data: [parseFloat(dataEl.dataset.debtVal), parseFloat(dataEl.dataset.currentVal), parseFloat(dataEl.dataset.roa), parseFloat(dataEl.dataset.roe)], backgroundColor: '#ffc107'}, {label: 'Ngưỡng', data: [2.0, 1.0, 5.0, 10.0], backgroundColor: 'rgba(25, 135, 84, 0.4)'}]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+    </script>
+</body>
+</html>

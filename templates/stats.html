@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Thống kê dữ liệu</title>
+    <style>
+        .card { border: 1px solid #ccc; padding: 20px; margin: 10px; border-radius: 8px; display: inline-block; width: 200px; }
+    </style>
+</head>
+<body>
+    <h1>Dashboard Thống kê Ngành</h1>
+    
+    <div class="card">
+        <h3>Tổng số mẫu</h3>
+        <p>{{ stats.total }}</p>
+    </div>
+
+    <div class="card">
+        <h3>Trung bình Tài sản</h3>
+        <p>{{ "{:,.0f}".format(stats.avg_assets) }}</p>
+    </div>
+
+    <div class="card">
+        <h3>Doanh thu cao nhất</h3>
+        <p>{{ "{:,.0f}".format(stats.max_revenue) }}</p>
+    </div>
+
+    <br><br>
+    <a href="/">Quay về trang chính</a>
+</body>
+</html>
