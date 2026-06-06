@@ -1,5 +1,5 @@
+.vscode/
 __pycache__/
-*.pyc
-instance/
-.venv/
-env/
+.env
+venv/
+*.pkl
