@@ -1,0 +1,24 @@
+# Ứng dụng AI Phân tích Chỉ số Tài chính Doanh nghiệp
+
+## 1. Mục tiêu dự án
+Xây dựng công cụ web thông minh cho phép người dùng nhập liệu các chỉ số tài chính, hệ thống tự động phân tích và đưa ra đánh giá dựa trên mô hình Machine Learning.
+
+## 2. Cấu trúc bài làm
+| Tệp/Thư mục | Vai trò chính |
+| :--- | :--- |
+| `app.py` | File trung tâm, điều khiển ứng dụng web (Flask). |
+| `ml_model.py` | Logic thuật toán và xử lý dữ liệu. |
+| `financial_model.pkl` | Mô hình AI đã huấn luyện. |
+| `templates/` | Giao diện web (HTML). |
+| `so_do_cay_quyet_dinh.png` | Sơ đồ thuật toán Cây quyết định. |
+| `requirements.txt` | Các thư viện cần thiết. |
+
+## 3. Quy trình vận hành
+- **Bước 1:** Người dùng nhập các chỉ số (ROA, ROE, nợ...) vào giao diện web.
+- **Bước 2:** Hệ thống tiếp nhận, gọi `ml_model.py` và mô hình `financial_model.pkl` để tính toán.
+- **Bước 3:** Trả về kết quả đánh giá tài chính ngay trên màn hình.
+
+## 4. Cách chạy thử
+Thầy cô chỉ cần mở terminal tại thư mục dự án và thực hiện 2 lệnh:
+1. `flask run --app app.py`
+2. Truy cập: `http://127.0.0.1:5000`
