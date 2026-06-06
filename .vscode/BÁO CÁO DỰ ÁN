@@ -1,0 +1,24 @@
+# Financial AI Anomaly Detection Dashboard
+
+Dự án phân tích dữ liệu tài chính doanh nghiệp và dự đoán rủi ro sử dụng mô hình học máy (Decision Tree).
+
+## 🚀 Giới thiệu
+Hệ thống này hỗ trợ người dùng phân tích các chỉ số tài chính (Tài sản, Nợ, Doanh thu, Lợi nhuận) và đưa ra cảnh báo rủi ro tự động dựa trên thuật toán Cây quyết định (Decision Tree).
+
+## 🛠 Công nghệ sử dụng
+- **Backend:** Python, Flask
+- **Machine Learning:** Scikit-learn (Decision Tree)
+- **Frontend:** Bootstrap 5, Chart.js, HTML5/CSS3
+- **Tools:** Git, GitHub
+
+## 📂 Cấu trúc dự án
+```text
+├── app.py              # File chạy chính của ứng dụng Flask
+├── templates/          # Chứa các file giao diện HTML
+│   ├── index.html      # Trang chủ
+│   ├── result.html     # Kết quả phân tích & Biểu đồ
+│   └── stats.html      # Thống kê chi tiết
+├── ml_model.py         # Code huấn luyện mô hình AI
+├── financial_model.pkl # Mô hình đã được huấn luyện
+├── requirements.txt    # Danh sách các thư viện cần thiết
+└── README.md           # Tài liệu hướng dẫn
